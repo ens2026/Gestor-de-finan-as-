@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceHub Pro | Mobile & Desktop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6; 
+            --success: #4ade80; 
+            --danger: #f87171; 
+            --bg: #0f172a; 
+            --card: #1e293b; 
+            --text-main: #f8fafc; 
+            --text-sub: #94a3b8; 
+            --border: #334155; 
+            --donate: #009ee3;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background-color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.4rem;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease;
+        }
+
+        .card h3 { font-size: 0.85rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.5px; }
+        .card p { font-size: 2rem; font-weight: 600; margin-top: 10px; word-break: break-all; }
+        .card.total { background: linear-gradient(135deg, var(--primary), #1d4ed8); border: none; }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .form-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .form-group {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .section-title { 
+            margin-bottom: 20px; 
+            font-size: 1.5rem; 
+            font-weight: 600; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            gap: 10px;
+        }
+
+        label { color: var(--text-sub); font-size: 0.8rem; margin-top: 15px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            margin-top: 8px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: #0f172a;
+            color: var(--text-main);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover { background: #2563eb; }
+        button.edit-mode { background: #eab308; color: #0f172a; }
+
+        .btn-clear {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            font-size: 0.8rem;
+            padding: 8px 15px;
+            width: auto;
+            margin: 0;
+        }
+
+        .transaction-list { 
+            list-style: none; 
+            max-height: 600px; 
+            overflow-y: auto; 
+            padding-right: 5px;
+        }
+
+        .transaction-item {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-left: 6px solid #334155;
+        }
+
+        .item-plus { border-left-color: var(--success); }
+        .item-minus { border-left-color: var(--danger); }
+
+        .item-actions { display: flex; gap: 8px; align-items: center; }
+        .action-btn { background: transparent; color: var(--text-sub); cursor: pointer; font-size: 0.95rem; border: none; }
+
+        .goal-container-top {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .goal-progress-bg {
+            margin-top: 15px;
+            background: #0f172a;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 14px;
+            border: 1px solid var(--border);
+        }
+
+        .goal-progress-bar {
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        footer { margin-top: 60px; padding: 40px; text-align: center; background: rgba(30, 41, 59, 0.5); border-radius: 20px; }
+        .btn-donate { display: inline-block; background-color: var(--donate); color: white; text-decoration: none; padding: 15px 35px; border-radius: 12px; font-weight: 600; margin-top: 15px; }
+
+        @media (max-width: 850px) {
+            body { padding: 20px 10px; }
+            header h1 { font-size: 2rem !important; }
+            .dashboard { grid-template-columns: 1fr; gap: 15px; }
+            .main-content { grid-template-columns: 1fr; gap: 30px; }
+            .form-sidebar { position: static; }
+            footer { padding: 25px; }
+            .btn-donate { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">$</div>
+            <h1 style="font-size: 2.5rem;">FinanceHub <span style="color: var(--primary)">Pro</span></h1>
+        </div>
+        <p style="color: var(--text-sub); font-size: 1.1rem;">Sua dashboard financeira otimizada para navegador</p>
+    </header>
+
+    <div class="dashboard">
+        <div class="card">
+            <h3>Total Entradas</h3>
+            <p id="money-plus" style="color: var(--success)">R$ 0.00</p>
+        </div>
+        <div class="card">
+            <h3>Total Saídas</h3>
+            <p id="money-minus" style="color: var(--danger)">R$ 0.00</p>
+        </div>
+        <div class="card total">
+            <h3>Saldo Disponível</h3>
+            <p id="balance">R$ 0.00</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="form-sidebar">
+            <!-- Painel de Gerenciamento de Metas -->
+            <div class="form-group">
+                <h2 style="font-size: 1.3rem; font-weight: 600;">Configurar Meta</h2>
+                <form id="goal-form">
+                    <label>Objetivo da Meta</label>
+                    <input type="text" id="goal-name" placeholder="Ex: Comprar Notebook" required autocomplete="off">
+                    <label>Valor Alvo (R$)</label>
+                    <input type="text" id="goal-target" placeholder="3000.00" required>
+                    <button type="submit" style="background: #10b981;">Estipular Nova Meta</button>
+                </form>
+            </div>
+
+            <!-- Painel de Lançamento de Transações Otimizado -->
+            <div class="form-group">
+                <h2 id="form-title" style="font-size: 1.3rem; font-weight: 600;">Novo Registro</h2>
+                <form id="form">
+                    <label>NOME DA TRANSAÇÃO</label>
+                    <input type="text" id="text" placeholder="Ex: Salário, Mercado..." required autocomplete="off">
+                    
+                    <label>TIPO DE OPERAÇÃO</label>
+                    <select id="type">
+                        <option value="income" style="color: var(--success)">📈 Entrada / Ganho</option>
+                        <option value="expense" style="color: var(--danger)">📉 Saída / Gasto</option>
+                    </select>
+
+                    <label>VALOR (R$)</label>
+                    <input type="text" id="amount" placeholder="150.00" required>
+                    
+                    <button type="submit" id="submit-btn">Adicionar à Lista</button>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <div id="goal-display" class="goal-container-top" style="display: none;">
+                <div style="display: flex; justify-content: space-between; font-size: 1.1rem; align-items: center;">
+                    <div>🎯 <span id="view-goal-name" style="font-weight: 600;">Meta</span></div>
+                    <span id="view-goal-percent" style="color: var(--success); font-weight: 600;">0%</span>
+                </div>
+                <div class="goal-progress-bg">
+                    <div id="goal-progress" class="goal-progress-bar"></div>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-sub); margin-top: 8px; text-align: right;" id="view-goal-values">R$ 0 / R$ 0</p>
+            </div>
+
+            <div class="section-title">
+                <h2>Histórico de Fluxo</h2>
+                <button class="btn-clear" onclick="clearAllData()">Limpar Banco</button>
+            </div>
+            <ul id="transactions" class="transaction-list"></ul>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p style="color: var(--text-sub); font-size: 1rem;">O FinanceHub Pro é uma ferramenta local e privada.</p>
+    <a href="https://mpago.la/217gKFS" target="_blank" class="btn-donate">☕ Apoiar o Projeto</a>
+</footer>
+
+<script>
+    const balance = document.getElementById('balance');
+    const moneyPlus = document.getElementById('money-plus');
+    const moneyMinus = document.getElementById('money-minus');
+    const list = document.getElementById('transactions');
+    const form = document.getElementById('form');
+    const text = document.getElementById('text');
+    const amount = document.getElementById('amount');
+    const typeSelect = document.getElementById('type');
+    
+    const goalForm = document.getElementById('goal-form');
+    const goalNameInput = document.getElementById('goal-name');
+    const goalTargetInput = document.getElementById('goal-target');
+
+    let transactions = [];
+    let currentGoal = null;
+    let editId = null;
+
+    function saveData(key, value) {
+        const str = JSON.stringify(value);
+        try { localStorage.setItem(key, str); } catch(e) {}
+        try { sessionStorage.setItem(key, str); } catch(e) {}
+    }
+
+    function loadData(key) {
+        let saved = null;
+        try { saved = localStorage.getItem(key); } catch(e) {}
+        if (!saved) { try { saved = sessionStorage.getItem(key); } catch(e) {} }
+        return saved ? JSON.parse(saved) : null;
+    }
+
+    // Trata e limpa strings numéricas com vírgula ou caractere inválido
+    function cleanNumber(val) {
+        let clean = val.replace(',', '.');
+        return parseFloat(clean);
+    }
+
+    function handleTransactionSubmit(e) {
+        e.preventDefault();
+        if (text.value.trim() === '' || amount.value.trim() === '') return;
+
+        let numValue = cleanNumber(amount.value);
+        if (isNaN(numValue) || numValue <= 0) {
+            alert("Por favor, digite um valor numérico válido maior que zero.");
+            return;
+        }
+
+        // Aplica o sinal com base na caixinha de seleção (Tipo)
+        if (typeSelect.value === 'expense') {
+            numValue = -Math.abs(numValue);
+        } else {
+            numValue = Math.abs(numValue);
+        }
+
+        if (editId !== null) {
+            transactions = transactions.map(t => t.id === editId ? { ...t, text: text.value, amount: numValue } : t);
+            editId = null;
+            document.getElementById('submit-btn').innerText = "Adicionar à Lista";
+            document.getElementById('submit-btn').classList.remove('edit-mode');
+            document.getElementById('form-title').innerText = "Novo Registro";
+        } else {
+            const transaction = {
+                id: Math.floor(Math.random() * 100000000),
+                text: text.value,
+                amount: numValue
+            };
+            transactions.push(transaction);
+        }
+
+        saveData('transactions', transactions);
+        init();
+        text.value = '';
+        amount.value = '';
+    }
+
+    function handleGoalSubmit(e) {
+        e.preventDefault();
+        if (goalNameInput.value.trim() === '' || goalTargetInput.value.trim() === '') return;
+
+        let targetValue = cleanNumber(goalTargetInput.value);
+        if (isNaN(targetValue) || targetValue <= 0) {
+            alert("Por favor, digite um valor de meta válido.");
+            return;
+        }
+
+        currentGoal = {
+            name: goalNameInput.value,
+            target: targetValue
+        };
+
+        saveData('finance_goal', currentGoal);
+        init();
+        goalNameInput.value = '';
+        goalTargetInput.value = '';
+    }
+
+    function editTransaction(id) {
+        const item = transactions.find(t => t.id === id);
+        if (!item) return;
+
+        text.value = item.text;
+        amount.value = Math.abs(item.amount);
+        typeSelect.value = item.amount < 0 ? 'expense' : 'income';
+        editId = id;
+
+        document.getElementById('submit-btn').innerText = "Salvar Alterações";
+        document.getElementById('submit-btn').classList.add('edit-mode');
+        document.getElementById('form-title').innerText = "Editando Registro ✏️";
+        text.focus();
+    }
+
+    function removeTransaction(id) {
+        if(editId === id) {
+            editId = null;
+            document.getElementById('submit-btn').innerText = "Adicionar à Lista";
+            document.getElementById('submit-btn').classList.remove('edit-mode');
+            document.getElementById('form-title').innerText = "Novo Registro";
+        }
+        transactions = transactions.filter(t => t.id !== id);
+        saveData('transactions', transactions);
+        init();
+    }
+
+    function clearAllData() {
+        if(confirm("Deseja limpar todos os dados?")) {
+            transactions = [];
+            currentGoal = null;
+            try { localStorage.clear(); sessionStorage.clear(); } catch(e) {}
+            editId = null;
+            init();
+        }
+    }
+
+    function addTransactionDOM(transaction) {
+        const sign = transaction.amount < 0 ? '-' : '+';
+        const item = document.createElement('li');
+        const cssClass = transaction.amount < 0 ? 'item-minus' : 'item-plus';
+
+        item.classList.add('transaction-item', cssClass);
+        item.innerHTML = `
+            <div style="min-width: 0; flex: 1;">
+                <strong style="font-size: 1.1rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${transaction.text}</strong>
+                <span style="color: ${transaction.amount < 0 ? 'var(--danger)' : 'var(--success)'}; font-weight: 600">
+                    ${sign} R$ ${Math.abs(transaction.amount).toFixed(2)}
+                </span>
+            </div>
+            <div class="item-actions">
+                <button class="action-btn" onclick="editTransaction(${transaction.id})">✏️</button>
+                <button class="action-btn" style="color: var(--danger)" onclick="removeTransaction(${transaction.id})">✕</button>
+            </div>
+        `;
+        list.appendChild(item);
+    }
+
+    function updateValues() {
+        const amounts = transactions.map(t => t.amount);
+        const rawTotal = amounts.reduce((acc, item) => (acc += item), 0);
+        const rawIncome = amounts.filter(item => item > 0).reduce((acc, item) => (acc += item), 0);
+        const rawExpense = amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) * -1;
+
+        balance.innerText = `R$ ${rawTotal.toFixed(2)}`;
+        moneyPlus.innerText = `R$ ${rawIncome.toFixed(2)}`;
+        moneyMinus.innerText = `R$ ${rawExpense.toFixed(2)}`;
+
+        const goalDisplay = document.getElementById('goal-display');
+        if (!currentGoal) {
+            goalDisplay.style.display = 'none';
+        } else {
+            goalDisplay.style.display = 'block';
+            const safeBalance = rawTotal > 0 ? rawTotal : 0;
+            let percent = Math.min((safeBalance / currentGoal.target) * 100, 100).toFixed(0);
+            if(isNaN(percent) || percent < 0) percent = 0;
+
+            document.getElementById('view-goal-name').innerText = currentGoal.name;
+            document.getElementById('view-goal-percent').innerText = `${percent}%`;
+            document.getElementById('view-goal-values').innerText = `R$ ${safeBalance.toFixed(2)} / R$ ${currentGoal.target.toFixed(2)}`;
+            document.getElementById('goal-progress').style.width = `${percent}%`;
+        }
+    }
+
+    function init() {
+        list.innerHTML = '';
+        transactions.forEach(addTransactionDOM);
+        updateValues();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        transactions = loadData('transactions') || [];
+        currentGoal = loadData('finance_goal') || null;
+        form.addEventListener('submit', handleTransactionSubmit);
+        goalForm.addEventListener('submit', handleGoalSubmit);
+        init();
+    });
+</script>
+</body>
+</html>
