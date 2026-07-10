@@ -577,7 +577,6 @@
         }
     }
 
-    // Função interna para construir cada linha do histórico
     function addTransactionDOM(transaction) {
         const list = document.getElementById('transactions');
         const sign = transaction.amount < 0 ? '-' : '+';
@@ -609,15 +608,16 @@
             transactions.forEach(addTransactionDOM);
         }
 
-        // 2. Calcular e Atualizar Cards de Valores
+        // 2. Calcular valores numéricos brutos (sem travar o código)
         const amounts = transactions.map(t => t.amount);
-        const total = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2);
-        const income = amounts.filter(item => item > 0).reduce((acc, item) => (acc += item), 0).toFixed(2);
-        const expense = (amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) * -1).toFixed(2);
+        const rawTotal = amounts.reduce((acc, item) => (acc += item), 0);
+        const rawIncome = amounts.filter(item => item > 0).reduce((acc, item) => (acc += item), 0);
+        const rawExpense = amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) * -1;
 
-        document.getElementById('balance').innerText = `R$ ${total}`;
-        document.getElementById('money-plus').innerText = `R$ ${income}`;
-        document.getElementById('money-minus').innerText = `R$ ${expense}`;
+        // Atualizar painéis visuais
+        document.getElementById('balance').innerText = `R$ ${rawTotal.toFixed(2)}`;
+        document.getElementById('money-plus').innerText = `R$ ${rawIncome.toFixed(2)}`;
+        document.getElementById('money-minus').innerText = `R$ ${rawExpense.toFixed(2)}`;
 
         // 3. Atualizar Layout de Metas
         const goalDisplay = document.getElementById('goal-display');
@@ -625,24 +625,20 @@
             goalDisplay.style.display = 'none';
         } else {
             goalDisplay.style.display = 'block';
-            const safeBalance = total > 0 ? total : 0;
+            const safeBalance = rawTotal > 0 ? rawTotal : 0;
             let percent = Math.min((safeBalance / currentGoal.target) * 100, 100).toFixed(0);
             if(isNaN(percent) || percent < 0) percent = 0;
 
             document.getElementById('view-goal-name').innerText = currentGoal.name;
             document.getElementById('view-goal-percent').innerText = `${percent}%`;
-            document.getElementById('view-goal-values').innerText = `R$ ${parseFloat(safeBalance).toFixed(2)} / R$ ${currentGoal.target.toFixed(2)}`;
+            document.getElementById('view-goal-values').innerText = `R$ ${safeBalance.toFixed(2)} / R$ ${currentGoal.target.toFixed(2)}`;
             document.getElementById('goal-progress').style.width = `${percent}%`;
         }
     }
 
-    // Aciona tudo assim que o navegador terminar o carregamento estrutural
+    // Inicialização segura do DOM
     document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('form').addEventListener('submit', handleFormSubmit);
         document.getElementById('goal-form').addEventListener('submit', handleGoalSubmit);
         renderApp();
     });
-</script>
-
-</body>
-</html>
