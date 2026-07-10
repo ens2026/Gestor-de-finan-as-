@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinanceHub Pro | Dashboard & Metas</title>
+    <title>FinanceHub Pro | Mobile & Desktop</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,7 +18,6 @@
             --donate: #009ee3;
         }
 
-        /* Scrollbar Customizada */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
@@ -35,18 +34,17 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            position: relative;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             width: 100%;
             flex: 1;
         }
 
         header {
-            margin-bottom: 45px;
+            margin-bottom: 40px;
             text-align: center;
         }
 
@@ -72,33 +70,6 @@
             box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
         }
 
-        /* BOTÃO CIRCULAR DO HISTÓRICO NO TOPO */
-        .btn-circle-history {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), #1d4ed8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1.4rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
-            z-index: 999;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin: 0;
-            padding: 0;
-        }
-        .btn-circle-history:hover {
-            transform: scale(1.1) rotate(15deg);
-            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.6);
-        }
-
         .dashboard {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -115,58 +86,58 @@
             transition: transform 0.3s ease;
         }
 
-        .card:hover { transform: translateY(-5px); }
         .card h3 { font-size: 0.85rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.5px; }
-        .card p { font-size: 2rem; font-weight: 600; margin-top: 10px; }
+        .card p { font-size: 2rem; font-weight: 600; margin-top: 10px; word-break: break-all; }
         .card.total { background: linear-gradient(135deg, var(--primary), #1d4ed8); border: none; }
 
         .main-content {
             display: grid;
-            grid-template-columns: 380px 1fr;
+            grid-template-columns: 350px 1fr;
             gap: 40px;
             align-items: start;
         }
 
-        @media (max-width: 900px) {
-            .main-content { grid-template-columns: 1fr; }
-            .dashboard { grid-template-columns: 1fr; }
-            .btn-circle-history { top: 15px; right: 15px; width: 48px; height: 48px; font-size: 1.2rem; }
-        }
-
-        .left-sidebar {
+        .form-sidebar {
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 25px;
             position: sticky;
             top: 20px;
         }
 
-        .panel-box {
+        .form-group {
             background: var(--card);
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
             border: 1px solid var(--border);
         }
 
-        label { color: var(--text-sub); font-size: 0.8rem; margin-top: 12px; display: block; text-transform: uppercase; letter-spacing: 0.5px;}
+        .section-title { 
+            margin-bottom: 20px; 
+            font-size: 1.5rem; 
+            font-weight: 600; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            gap: 10px;
+        }
 
-        input {
+        label { color: var(--text-sub); font-size: 0.8rem; margin-top: 15px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        input, select {
             width: 100%;
-            padding: 12px;
-            margin-top: 6px;
+            padding: 14px;
+            margin-top: 8px;
             border: 1px solid var(--border);
             border-radius: 10px;
             font-size: 1rem;
             background-color: #0f172a;
             color: var(--text-main);
-            transition: border-color 0.3s;
         }
-
-        input:focus { outline: none; border-color: var(--primary); }
 
         button {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             margin-top: 20px;
             background: var(--primary);
             color: white;
@@ -177,7 +148,7 @@
             transition: all 0.3s;
         }
 
-        button:hover { background: #2563eb; transform: scale(1.01); }
+        button:hover { background: #2563eb; }
         button.edit-mode { background: #eab308; color: #0f172a; }
 
         .btn-clear {
@@ -189,94 +160,16 @@
             width: auto;
             margin: 0;
         }
-        .btn-clear:hover { background: var(--danger); color: white; }
-
-        /* MODAL DE SOBREPOSIÇÃO (Overlay) */
-        .history-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .history-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .history-modal-box {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            width: 90%;
-            max-width: 650px;
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .history-overlay.active .history-modal-box {
-            transform: scale(1);
-        }
-
-        .history-modal-header {
-            padding: 25px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .history-modal-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .btn-close-modal {
-            background: rgba(255,255,255,0.05);
-            color: var(--text-sub);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.2s;
-        }
-        .btn-close-modal:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        .history-modal-body {
-            padding: 25px;
-            overflow-y: auto;
-            flex: 1;
-        }
 
         .transaction-list { 
             list-style: none; 
+            max-height: 600px; 
+            overflow-y: auto; 
+            padding-right: 5px;
         }
 
         .transaction-item {
-            background: #0f172a;
+            background: var(--card);
             padding: 20px;
             border-radius: 15px;
             margin-bottom: 15px;
@@ -290,26 +183,10 @@
         .item-plus { border-left-color: var(--success); }
         .item-minus { border-left-color: var(--danger); }
 
-        .actions {
-            display: flex;
-            gap: 15px;
-        }
+        .item-actions { display: flex; gap: 8px; align-items: center; }
+        .action-btn { background: transparent; color: var(--text-sub); cursor: pointer; font-size: 0.95rem; border: none; }
 
-        .action-btn {
-            background: transparent;
-            color: var(--text-sub);
-            width: auto;
-            margin: 0;
-            padding: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-        .action-btn.edit:hover { color: #eab308; }
-        .action-btn.delete:hover { color: var(--danger); }
-
-        /* Área de Metas */
-        .goal-box-top {
+        .goal-container-top {
             background: var(--card);
             padding: 25px;
             border-radius: 20px;
@@ -317,12 +194,11 @@
             margin-bottom: 30px;
         }
 
-        .goal-progress-container {
+        .goal-progress-bg {
             margin-top: 15px;
             background: #0f172a;
             border-radius: 10px;
             overflow: hidden;
-            width: 100%;
             height: 14px;
             border: 1px solid var(--border);
         }
@@ -334,31 +210,21 @@
             transition: width 0.5s ease;
         }
 
-        footer {
-            margin-top: 60px;
-            padding: 40px;
-            text-align: center;
-            background: rgba(30, 41, 59, 0.5);
-            border-radius: 20px;
-        }
+        footer { margin-top: 60px; padding: 40px; text-align: center; background: rgba(30, 41, 59, 0.5); border-radius: 20px; }
+        .btn-donate { display: inline-block; background-color: var(--donate); color: white; text-decoration: none; padding: 15px 35px; border-radius: 12px; font-weight: 600; margin-top: 15px; }
 
-        .btn-donate {
-            display: inline-block;
-            background-color: var(--donate);
-            color: white;
-            text-decoration: none;
-            padding: 15px 35px;
-            border-radius: 12px;
-            font-weight: 600;
-            margin-top: 15px;
-            transition: all 0.3s ease;
+        @media (max-width: 850px) {
+            body { padding: 20px 10px; }
+            header h1 { font-size: 2rem !important; }
+            .dashboard { grid-template-columns: 1fr; gap: 15px; }
+            .main-content { grid-template-columns: 1fr; gap: 30px; }
+            .form-sidebar { position: static; }
+            footer { padding: 25px; }
+            .btn-donate { width: 100%; text-align: center; }
         }
-        .btn-donate:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(0, 158, 227, 0.4); }
     </style>
 </head>
 <body>
-
-<button class="btn-circle-history" onclick="openHistoryOverlay()" title="Ver Histórico">📋</button>
 
 <div class="container">
     <header>
@@ -366,7 +232,7 @@
             <div class="logo-icon">$</div>
             <h1 style="font-size: 2.5rem;">FinanceHub <span style="color: var(--primary)">Pro</span></h1>
         </div>
-        <p style="color: var(--text-sub); font-size: 1.1rem;">Gestão financeira integrada com metas de economia</p>
+        <p style="color: var(--text-sub); font-size: 1.1rem;">Sua dashboard financeira otimizada para navegador</p>
     </header>
 
     <div class="dashboard">
@@ -385,241 +251,230 @@
     </div>
 
     <div class="main-content">
-        <div class="left-sidebar">
-            
-            <div class="panel-box">
-                <h2 style="margin-bottom: 15px;">Configurar Meta</h2>
+        <div class="form-sidebar">
+            <!-- Painel de Gerenciamento de Metas -->
+            <div class="form-group">
+                <h2 style="font-size: 1.3rem; font-weight: 600;">Configurar Meta</h2>
                 <form id="goal-form">
                     <label>Objetivo da Meta</label>
                     <input type="text" id="goal-name" placeholder="Ex: Comprar Notebook" required autocomplete="off">
-                    
                     <label>Valor Alvo (R$)</label>
-                    <input type="number" id="goal-target" step="0.01" placeholder="3000.00" required>
-                    
-                    <button type="submit" style="background: #10b981;">Definir Nova Meta</button>
+                    <input type="text" id="goal-target" placeholder="3000.00" required>
+                    <button type="submit" style="background: #10b981;">Estipular Nova Meta</button>
                 </form>
             </div>
 
-            <div class="panel-box">
-                <h2 id="form-title" style="margin-bottom: 15px;">Novo Registro</h2>
+            <!-- Painel de Lançamento de Transações Otimizado -->
+            <div class="form-group">
+                <h2 id="form-title" style="font-size: 1.3rem; font-weight: 600;">Novo Registro</h2>
                 <form id="form">
-                    <label>Nome da Transação</label>
-                    <input type="text" id="text" placeholder="Ex: Salário" required autocomplete="off">
+                    <label>NOME DA TRANSAÇÃO</label>
+                    <input type="text" id="text" placeholder="Ex: Salário, Mercado..." required autocomplete="off">
                     
-                    <label>Valor (R$ - use negativo para saídas)</label>
-                    <input type="number" id="amount" step="0.01" placeholder="-150.00" required>
+                    <label>TIPO DE OPERAÇÃO</label>
+                    <select id="type">
+                        <option value="income" style="color: var(--success)">📈 Entrada / Ganho</option>
+                        <option value="expense" style="color: var(--danger)">📉 Saída / Gasto</option>
+                    </select>
+
+                    <label>VALOR (R$)</label>
+                    <input type="text" id="amount" placeholder="150.00" required>
                     
-                    <button type="submit" id="submit-btn">Adicionar Lançamento</button>
+                    <button type="submit" id="submit-btn">Adicionar à Lista</button>
                 </form>
             </div>
-
         </div>
 
         <div>
-            <div id="goal-display" class="goal-box-top" style="display: none;">
-                <div style="display: flex; justify-content: space-between; font-size: 1.1rem;">
+            <div id="goal-display" class="goal-container-top" style="display: none;">
+                <div style="display: flex; justify-content: space-between; font-size: 1.1rem; align-items: center;">
                     <div>🎯 <span id="view-goal-name" style="font-weight: 600;">Meta</span></div>
                     <span id="view-goal-percent" style="color: var(--success); font-weight: 600;">0%</span>
                 </div>
-                <div class="goal-progress-container">
+                <div class="goal-progress-bg">
                     <div id="goal-progress" class="goal-progress-bar"></div>
                 </div>
                 <p style="font-size: 0.9rem; color: var(--text-sub); margin-top: 8px; text-align: right;" id="view-goal-values">R$ 0 / R$ 0</p>
             </div>
-        </div>
-    </div>
-</div>
 
-<div class="history-overlay" id="historyOverlay" onclick="closeHistoryOverlayOutside(event)">
-    <div class="history-modal-box">
-        <div class="history-modal-header">
-            <h2>📊 Histórico de Fluxo</h2>
-            <button class="btn-close-modal" onclick="closeHistoryOverlay()">✕</button>
-        </div>
-        <div class="history-modal-body">
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-                <button class="btn-clear" onclick="clearAllData()">Limpar Tudo</button>
+            <div class="section-title">
+                <h2>Histórico de Fluxo</h2>
+                <button class="btn-clear" onclick="clearAllData()">Limpar Banco</button>
             </div>
-            <ul id="transactions" class="transaction-list">
-                </ul>
+            <ul id="transactions" class="transaction-list"></ul>
         </div>
     </div>
 </div>
 
 <footer>
-    <p style="color: var(--text-sub);">O FinanceHub Pro criptografa os dados localmente no seu navegador.</p>
-    <a href="https://mpago.la/217gKFS" target="_blank" class="btn-donate">
-        ☕ Apoiar o Projeto (Doação Mercado Pago)
-    </a>
+    <p style="color: var(--text-sub); font-size: 1rem;">O FinanceHub Pro é uma ferramenta local e privada.</p>
+    <a href="https://mpago.la/217gKFS" target="_blank" class="btn-donate">☕ Apoiar o Projeto</a>
 </footer>
 
 <script>
-    // Inicialização direta e global de dados
-    let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-    let currentGoal = JSON.parse(localStorage.getItem('finance_goal')) || null;
+    const balance = document.getElementById('balance');
+    const moneyPlus = document.getElementById('money-plus');
+    const moneyMinus = document.getElementById('money-minus');
+    const list = document.getElementById('transactions');
+    const form = document.getElementById('form');
+    const text = document.getElementById('text');
+    const amount = document.getElementById('amount');
+    const typeSelect = document.getElementById('type');
+    
+    const goalForm = document.getElementById('goal-form');
+    const goalNameInput = document.getElementById('goal-name');
+    const goalTargetInput = document.getElementById('goal-target');
+
+    let transactions = [];
+    let currentGoal = null;
     let editId = null;
 
-    // Funções de manipulação do Modal Overlay
-    function openHistoryOverlay() {
-        document.getElementById('historyOverlay').classList.add('active');
+    function saveData(key, value) {
+        const str = JSON.stringify(value);
+        try { localStorage.setItem(key, str); } catch(e) {}
+        try { sessionStorage.setItem(key, str); } catch(e) {}
     }
 
-    function closeHistoryOverlay() {
-        document.getElementById('historyOverlay').classList.remove('active');
+    function loadData(key) {
+        let saved = null;
+        try { saved = localStorage.getItem(key); } catch(e) {}
+        if (!saved) { try { saved = sessionStorage.getItem(key); } catch(e) {} }
+        return saved ? JSON.parse(saved) : null;
     }
 
-    function closeHistoryOverlayOutside(e) {
-        if (e.target === document.getElementById('historyOverlay')) {
-            closeHistoryOverlay();
-        }
+    // Trata e limpa strings numéricas com vírgula ou caractere inválido
+    function cleanNumber(val) {
+        let clean = val.replace(',', '.');
+        return parseFloat(clean);
     }
 
-    // Processamento do Formulário de Transações
-    function handleFormSubmit(e) {
+    function handleTransactionSubmit(e) {
         e.preventDefault();
-        
-        const textInput = document.getElementById('text');
-        const amountInput = document.getElementById('amount');
-        const submitBtn = document.getElementById('submit-btn');
-        const formTitle = document.getElementById('form-title');
+        if (text.value.trim() === '' || amount.value.trim() === '') return;
 
-        if (textInput.value.trim() === '' || amountInput.value.trim() === '') return;
+        let numValue = cleanNumber(amount.value);
+        if (isNaN(numValue) || numValue <= 0) {
+            alert("Por favor, digite um valor numérico válido maior que zero.");
+            return;
+        }
+
+        // Aplica o sinal com base na caixinha de seleção (Tipo)
+        if (typeSelect.value === 'expense') {
+            numValue = -Math.abs(numValue);
+        } else {
+            numValue = Math.abs(numValue);
+        }
 
         if (editId !== null) {
-            transactions = transactions.map(t => t.id === editId ? { ...t, text: textInput.value, amount: +amountInput.value } : t);
+            transactions = transactions.map(t => t.id === editId ? { ...t, text: text.value, amount: numValue } : t);
             editId = null;
-            submitBtn.innerText = "Adicionar Lançamento";
-            submitBtn.classList.remove('edit-mode');
-            formTitle.innerText = "Novo Registro";
-            openHistoryOverlay();
+            document.getElementById('submit-btn').innerText = "Adicionar à Lista";
+            document.getElementById('submit-btn').classList.remove('edit-mode');
+            document.getElementById('form-title').innerText = "Novo Registro";
         } else {
             const transaction = {
                 id: Math.floor(Math.random() * 100000000),
-                text: textInput.value,
-                amount: +amountInput.value
+                text: text.value,
+                amount: numValue
             };
             transactions.push(transaction);
-            openHistoryOverlay();
         }
 
-        // Salva imediatamente no localStorage
-        localStorage.setItem('transactions', JSON.stringify(transactions));
-        
-        // Renderiza as atualizações na tela
-        renderApp();
-        
-        textInput.value = '';
-        amountInput.value = '';
+        saveData('transactions', transactions);
+        init();
+        text.value = '';
+        amount.value = '';
     }
 
-    // Processamento do Formulário de Metas
     function handleGoalSubmit(e) {
         e.preventDefault();
-        const goalNameInput = document.getElementById('goal-name');
-        const goalTargetInput = document.getElementById('goal-target');
+        if (goalNameInput.value.trim() === '' || goalTargetInput.value.trim() === '') return;
+
+        let targetValue = cleanNumber(goalTargetInput.value);
+        if (isNaN(targetValue) || targetValue <= 0) {
+            alert("Por favor, digite um valor de meta válido.");
+            return;
+        }
 
         currentGoal = {
             name: goalNameInput.value,
-            target: +goalTargetInput.value
+            target: targetValue
         };
 
-        // Salva imediatamente no localStorage
-        localStorage.setItem('finance_goal', JSON.stringify(currentGoal));
-        
-        // Renderiza as atualizações na tela
-        renderApp();
-
+        saveData('finance_goal', currentGoal);
+        init();
         goalNameInput.value = '';
         goalTargetInput.value = '';
     }
 
     function editTransaction(id) {
-        const itemToEdit = transactions.find(t => t.id === id);
-        if (!itemToEdit) return;
+        const item = transactions.find(t => t.id === id);
+        if (!item) return;
 
-        document.getElementById('text').value = itemToEdit.text;
-        document.getElementById('amount').value = itemToEdit.amount;
-        
+        text.value = item.text;
+        amount.value = Math.abs(item.amount);
+        typeSelect.value = item.amount < 0 ? 'expense' : 'income';
         editId = id;
-        const submitBtn = document.getElementById('submit-btn');
-        submitBtn.innerText = "Salvar Alterações";
-        submitBtn.classList.add('edit-mode');
+
+        document.getElementById('submit-btn').innerText = "Salvar Alterações";
+        document.getElementById('submit-btn').classList.add('edit-mode');
         document.getElementById('form-title').innerText = "Editando Registro ✏️";
-        
-        closeHistoryOverlay();
-        document.getElementById('text').focus();
+        text.focus();
     }
 
     function removeTransaction(id) {
         if(editId === id) {
             editId = null;
-            document.getElementById('submit-btn').innerText = "Adicionar Lançamento";
+            document.getElementById('submit-btn').innerText = "Adicionar à Lista";
             document.getElementById('submit-btn').classList.remove('edit-mode');
             document.getElementById('form-title').innerText = "Novo Registro";
         }
         transactions = transactions.filter(t => t.id !== id);
-        localStorage.setItem('transactions', JSON.stringify(transactions));
-        renderApp();
+        saveData('transactions', transactions);
+        init();
     }
 
     function clearAllData() {
-        if(confirm("Deseja apagar todos os registros e metas permanentemente?")) {
+        if(confirm("Deseja limpar todos os dados?")) {
             transactions = [];
             currentGoal = null;
-            localStorage.removeItem('transactions');
-            localStorage.removeItem('finance_goal');
+            try { localStorage.clear(); sessionStorage.clear(); } catch(e) {}
             editId = null;
-            document.getElementById('submit-btn').innerText = "Adicionar Lançamento";
-            document.getElementById('submit-btn').classList.remove('edit-mode');
-            document.getElementById('form-title').innerText = "Novo Registro";
-            closeHistoryOverlay();
-            renderApp();
+            init();
         }
     }
 
     function addTransactionDOM(transaction) {
-        const list = document.getElementById('transactions');
         const sign = transaction.amount < 0 ? '-' : '+';
         const item = document.createElement('li');
         const cssClass = transaction.amount < 0 ? 'item-minus' : 'item-plus';
 
         item.classList.add('transaction-item', cssClass);
         item.innerHTML = `
-            <div>
-                <strong style="font-size: 1.1rem">${transaction.text}</strong><br>
+            <div style="min-width: 0; flex: 1;">
+                <strong style="font-size: 1.1rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${transaction.text}</strong>
                 <span style="color: ${transaction.amount < 0 ? 'var(--danger)' : 'var(--success)'}; font-weight: 600">
                     ${sign} R$ ${Math.abs(transaction.amount).toFixed(2)}
                 </span>
             </div>
-            <div class="actions">
-                <button class="action-btn edit" onclick="editTransaction(${transaction.id})" title="Editar">✏️</button>
-                <button class="action-btn delete" onclick="removeTransaction(${transaction.id})" title="Excluir">✕</button>
+            <div class="item-actions">
+                <button class="action-btn" onclick="editTransaction(${transaction.id})">✏️</button>
+                <button class="action-btn" style="color: var(--danger)" onclick="removeTransaction(${transaction.id})">✕</button>
             </div>
         `;
         list.appendChild(item);
     }
 
-    // Renderizador único e centralizado de toda a interface
-    function renderApp() {
-        // 1. Atualizar Lista do Histórico
-        const list = document.getElementById('transactions');
-        if (list) {
-            list.innerHTML = '';
-            transactions.forEach(addTransactionDOM);
-        }
-
-        // 2. Calcular valores numéricos brutos (sem travar o código)
+    function updateValues() {
         const amounts = transactions.map(t => t.amount);
         const rawTotal = amounts.reduce((acc, item) => (acc += item), 0);
         const rawIncome = amounts.filter(item => item > 0).reduce((acc, item) => (acc += item), 0);
         const rawExpense = amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) * -1;
 
-        // Atualizar painéis visuais
-        document.getElementById('balance').innerText = `R$ ${rawTotal.toFixed(2)}`;
-        document.getElementById('money-plus').innerText = `R$ ${rawIncome.toFixed(2)}`;
-        document.getElementById('money-minus').innerText = `R$ ${rawExpense.toFixed(2)}`;
+        balance.innerText = `R$ ${rawTotal.toFixed(2)}`;
+        moneyPlus.innerText = `R$ ${rawIncome.toFixed(2)}`;
+        moneyMinus.innerText = `R$ ${rawExpense.toFixed(2)}`;
 
-        // 3. Atualizar Layout de Metas
         const goalDisplay = document.getElementById('goal-display');
         if (!currentGoal) {
             goalDisplay.style.display = 'none';
@@ -636,9 +491,19 @@
         }
     }
 
-    // Inicialização segura do DOM
+    function init() {
+        list.innerHTML = '';
+        transactions.forEach(addTransactionDOM);
+        updateValues();
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById('form').addEventListener('submit', handleFormSubmit);
-        document.getElementById('goal-form').addEventListener('submit', handleGoalSubmit);
-        renderApp();
+        transactions = loadData('transactions') || [];
+        currentGoal = loadData('finance_goal') || null;
+        form.addEventListener('submit', handleTransactionSubmit);
+        goalForm.addEventListener('submit', handleGoalSubmit);
+        init();
     });
+</script>
+</body>
+</html>
